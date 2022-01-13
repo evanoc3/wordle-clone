@@ -1,13 +1,74 @@
 "use strict";
 
 import htm from "../htm@3.1.0.js";
-import { h } from "../preact@10.6.4.js";
-import { useEffect, useState } from "../preact-hooks@10.6.4.js";
-import GuessInput from "./GuessInput.js";
-import GuessSubmitButton from "./GuessSubmitButton.js";
+import { h, Component } from "../preact@10.6.4.js";
+import { GuessInput } from "./index.js";
 
 const html = htm.bind(h);
 
+
+
+export default class GuessRow extends Component {
+
+	constructor(props) {
+		super(props);
+
+		this.state = {
+		};
+
+		this.onSubmit = this.onSubmit.bind(this);
+	}
+
+
+	render(props, state) {
+		// If props.charStates is defined, then this is a readonly row presenting information about a previous guess
+		if(props.previousGuessInfo) {
+			return html`
+				<div class="guess-row">
+					${
+						props.previousGuessInfo.letters.map(l => {
+							return html`<${GuessInput} disabled char=${l.guess} state=${l.state} />`;
+						})
+					}
+				</div>
+			`;
+		}
+
+		// Otherwise, it is an editable row
+		return html`
+			<form class="guess-row" onsubmit=${this.onSubmit} autocomplete="off">
+				${
+					Array.prototype.map.call(props.guess, c => {
+						return html`<${GuessInput} disabled char=${c} />`;
+					})
+				}
+
+				${
+					Array.from(Array(5 - props.guess.length)).map(() => {
+						return html`<${GuessInput} char=""  />`;
+					})
+				}
+			</form>
+		`;
+	}
+
+
+	onSubmit(e) {
+		e.preventDefault();
+	}
+
+
+	addLetter() {
+
+	}
+
+	removeLetter() {
+
+	}
+
+}
+
+/*
 export default function GuessRow(props) {
 	const [guess, setGuess] = useState("");
 	const [inputStates, setInputStates] = useState(["", "", "", "", ""]);
@@ -50,13 +111,7 @@ export default function GuessRow(props) {
 	}
 
 	return html`
-	<form class="guess-row" id="guess-${props.id}" onsubmit=${onSubmit}>
-		<${GuessInput} id=${props.id * 5 + 0} enabled=${props.enabled && currentLetter === 0} next=${next} prev=${prev} class=${inputStates[0]} />
-		<${GuessInput} id=${props.id * 5 + 1} enabled=${props.enabled && currentLetter === 1} next=${next} prev=${prev} class=${inputStates[1]} />
-		<${GuessInput} id=${props.id * 5 + 2} enabled=${props.enabled && currentLetter === 2} next=${next} prev=${prev} class=${inputStates[2]} />
-		<${GuessInput} id=${props.id * 5 + 3} enabled=${props.enabled && currentLetter === 3} next=${next} prev=${prev} class=${inputStates[3]} />
-		<${GuessInput} id=${props.id * 5 + 4} enabled=${props.enabled && currentLetter === 4} next=${next} prev=${prev} class=${inputStates[4]} />
-		<${GuessSubmitButton} enabled=${props.enabled && currentLetter === 5} prev=${prev} />
-	</form>
+
 	`;
 }
+*/

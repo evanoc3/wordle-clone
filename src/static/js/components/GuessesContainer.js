@@ -1,29 +1,41 @@
 "use strict";
 
 import htm from "../htm@3.1.0.js";
-import { h } from "../preact@10.6.4.js";
-import { useState } from "../preact-hooks@10.6.4.js";
-import GuessRow from "./GuessRow.js"
+import { h, Component } from "../preact@10.6.4.js";
+import { GuessRow } from "./index.js"
 
 const html = htm.bind(h);
 
-export default function GuessesContainer(props) {
 
-	const [currentIndex, setCurrentIndex] = useState(0);
+export default class GuessesContainer extends Component {
 
-	function nextGuess() {
-		if(currentIndex < 5) {
-			setCurrentIndex(currentIndex + 1); 
-		}
+	constructor(props) {
+		super(props);
+
+		this.state = {
+		};
 	}
 
-	return html`
-		<section id="guesses-container">
-			<${GuessRow} id=${0} enabled=${currentIndex === 0} nextGuess=${nextGuess} />
-			<${GuessRow} id=${1} enabled=${currentIndex === 1} nextGuess=${nextGuess} />
-			<${GuessRow} id=${2} enabled=${currentIndex === 2} nextGuess=${nextGuess} />
-			<${GuessRow} id=${3} enabled=${currentIndex === 3} nextGuess=${nextGuess} />
-			<${GuessRow} id=${4} enabled=${currentIndex === 4} nextGuess=${nextGuess} />
-		</section>
-	`;
+
+	render(props, state) {
+		return html`
+			<section id="guesses-container">
+				${
+					props.previousGuessInfo.map(previousGuessInfo => {
+						return html`<${GuessRow} disabled previousGuessInfo=${previousGuessInfo} />`;
+					})
+				}
+
+				<${GuessRow} guess=${props.guess} disabled=${false} />
+
+				${
+					Array.from(Array(5 - props.previousGuessInfo.length - 1)).map(() => {
+						return html`<${GuessRow} guess="" disabled />`
+					})
+				}
+				
+			</section>
+		`;
+	}
+
 }

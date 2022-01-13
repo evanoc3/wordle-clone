@@ -28,10 +28,12 @@ header > h1 {
 	font-size: 2rem;
 }
 
+
 main {
 	height: calc(100vh - 4rem);
 	position: relative;
 }
+
 
 main > #guesses-container {
 	align-items: center;
@@ -50,13 +52,14 @@ main > #guesses-container > .guess-row {
 }
 
 main > #guesses-container > .guess-row > .letter-input {
-	padding: 0.4rem;
-	font-size: 1.2rem;
-	width: 2rem;
-	height: 2rem;
+	padding: 0.4em;
+	font-size: 2rem;
+	width: 1.8em;
+	height: 1.8em;
 	border: 1px solid #222;
 	border-radius: 0;
 	outline: none;
+	text-align: center;
 }
 
 main > #guesses-container > .guess-row > .letter-input:not(:disabled) {
@@ -64,22 +67,22 @@ main > #guesses-container > .guess-row > .letter-input:not(:disabled) {
 	border-radius: 2px;
 }
 
-main > #guesses-container > .guess-row > .letter-input.correct {
-	background-color: rgba(0, 255, 0, 0.25);
-	border: 2px solid green;
-	color: green;
+.correct {
+	color: 005700;
+	border-color: #005700;
+	background-color: #397639;
 }
 
-main > #guesses-container > .guess-row > .letter-input.partial {
-	background-color: rgba(255, 255, 0, 0.2);
-	border: 2px solid darkgoldenrod;
+.partial {
+	background-color: #c2b718;
+	border-color: darkgoldenrod;
 	color: darkgoldenrod;
 }
 
-main > #guesses-container > .guess-row > .letter-input.incorrect {
-	background-color: rgba(0, 0, 0, 0.1);
-	border: 2px solid #444;
-	color: #444;
+.wrong {
+	background-color: #4b4b4b;
+	color: #222;
+	border: #222;
 }
 
 main > #guesses-container > .guess-row > .submit-button {
@@ -90,11 +93,15 @@ main > #guesses-container > .guess-row > .submit-button {
 	pointer-events: none;
 }
 
+
 main > #keyboard-container {
-	display: none;
 	height: 35%;
 	width: 100%;
 	background-color: #ddd;
+}
+
+main > #keyboard-container > .keyboard-key {
+	padding: 1rem;
 }
 
 footer {
