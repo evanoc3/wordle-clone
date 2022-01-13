@@ -1,3 +1,53 @@
+:root {
+	--font-colour: #222;
+	--background-colour: white;
+
+	--header-background-colour: green;
+	--header-title-font-colour: white;
+
+	--input-background-colour: white;
+	--input-disabled-background-colour: white;
+	--input-border-colour: cyan;
+	--input-disabled-border-colour: #b5b5b5;
+
+	--input-wrong-background-colour: #4b4b4b;
+	--input-wrong-border-colour: #222;
+	--input-wrong-font-colour: #222;
+
+	--input-partial-background-colour: #c2b718;
+	--input-partial-border-colour: darkgoldenrod;
+	--input-partial-font-colour: darkgoldenrod;
+
+	--input-correct-background-colour: #005700;
+	--input-correct-border-colour: #005700;
+	--input-correct-font-colour: #397639;
+
+	--keyboard-background-colour: #ddd;
+
+	--keyboard-key-background-colour: white;
+	--keyboard-key-border-colour: #d8d8d8;
+	--keyboard-key-font-colour: black;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--font-colour: white;
+		--background-colour: black;
+	
+		--input-background-colour: #6d6d6d;
+		--input-disabled-background-colour: #545454;
+		--input-border-colour: magenta;
+		--input-disabled-border-colour: #5e5e5e;
+	
+		--keyboard-background-colour: #545454;
+	
+		--keyboard-key-background-colour: #6d6d6d;
+		--keyboard-key-border-colour: #707070;
+		--keyboard-key-font-colour: white;
+	}
+}
+
+
 * {
 	margin: 0;
 	padding: 0;
@@ -10,28 +60,33 @@ html, body {
 }
 
 body {
-	overflow: hidden auto;
+	overflow: hidden;
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-	color: #222;
+	color: var(--font-colour);
 	line-height: 1;
+	background-color: var(--background-colour);
 }
 
 
 header {
 	width: 100%;
-	background-color: green;
+	background-color: var(--header-background-colour);
 	padding: 1rem;
+	height: calc(4rem + env(safe-area-inset-top));
 }
 
 header > h1 {
-	color: white;
+	color: var(--header-title-font-colour);
 	font-size: 2rem;
 }
 
 
 main {
-	height: calc(100vh - 4rem);
+	height: calc(100vh - 4rem - env(safe-area-inset-top)); /* minus header height */
 	position: relative;
+	display: flex;
+	flex-flow: column nowrap;
+	padding-bottom: env(safe-area-inset-bottom);
 }
 
 
@@ -41,88 +96,114 @@ main > #guesses-container {
 	display: flex;
 	flex-flow: column nowrap;
 	row-gap: 0.25rem;
-	height: 65%;
+	flex-grow: 1;
 }
 
 main > #guesses-container > .guess-row {
-	position: relative;
 	display: flex;
 	flex-flow: row nowrap;
 	column-gap: 0.25rem;
 }
 
 main > #guesses-container > .guess-row > .letter-input {
-	padding: 0.4em;
-	font-size: 2rem;
-	width: 1.8em;
-	height: 1.8em;
-	border: 1px solid #222;
+	/* Clear default styles */
 	border-radius: 0;
 	outline: none;
+	/* Style from scratch */
+	font-size: 1.75rem;
+	width: 1.8em;
+	height: 1.8em;
+	border: 1px solid var(--input-border-colour);
+	background-color: var(--input-background-colour);
 	text-align: center;
 }
 
-main > #guesses-container > .guess-row > .letter-input:not(:disabled) {
-	box-shadow: 0 0 3px rgba(0, 255, 255, 0.75);
-	border-radius: 2px;
+main > #guesses-container > .guess-row > .letter-input:disabled {
+	background-color: var(--input-disabled-background-colour);
+	border-color: var(--input-disabled-border-colour);
+	opacity: 1;
 }
 
-.correct {
-	color: 005700;
-	border-color: #005700;
-	background-color: #397639;
+main > #guesses-container > .guess-row > .letter-input.wrong {
+	background-color: var(--input-wrong-background-colour);
+	border-color: var(--input-wrong-border-colour);
+	color: var(--input-wrong-font-colour);
 }
 
-.partial {
-	background-color: #c2b718;
-	border-color: darkgoldenrod;
-	color: darkgoldenrod;
+main > #guesses-container > .guess-row > .letter-input.partial {
+	background-color: var(--input-partial-background-colour);
+	border-color: var(--input-partial-border-colour);
+	color: var(--input-partial-font-colour);
 }
 
-.wrong {
-	background-color: #4b4b4b;
-	color: #222;
-	border: #222;
-}
-
-main > #guesses-container > .guess-row > .submit-button {
-	position: absolute;
-	left: 100%;
-	opacity: 0;
-	outline: none;
-	pointer-events: none;
+main > #guesses-container > .guess-row > .letter-input.correct {
+	background-color: var(--input-correct-background-colour);
+	border-color: var(--input-correct-border-colour);
+	color: var(--input-correct-font-colour);
 }
 
 
 main > #keyboard-container {
-	height: 35%;
 	width: 100%;
-	background-color: #ddd;
+	background-color: var(--keyboard-background-colour);
 	display: flex;
 	flex-flow: column nowrap;
 	justify-content: center;
 	align-items: center;
-	row-gap: 0.5rem;
+	row-gap: 0.3rem;
+	flex-grow: 0;
+	padding: 0.5rem 0.3rem;
 }
 
 main > #keyboard-container > .keyboard-row {
 	display: inline-flex;
 	flex-flow: row nowrap;
 	align-items: center;
-	column-gap: 0.5rem;
+	column-gap: 0.3rem;
 }
 
 main > #keyboard-container > .keyboard-row > .keyboard-key {
-	width: 4rem;
-	height: 4rem;
-	font-size: 1.5rem;
+	/* clear default button styles */
+	border: none;
+	background: none;
+	border: none;
+	outline: none;
+	/* style from scratch */
+	width: calc(((100vw - (0.3rem * 9)) - 1rem) / 10);
+	height: calc((((100vw - (0.3rem * 9)) - 1rem) / 10) * 1.4);
+	font-size: 1.25rem;
+	color: var(--keyboard-key-font-colour);
+	background-color: var(--keyboard-key-background-colour);
+	border-radius: 0.3rem;
+	border: 1px solid var(--keyboard-key-border-colour);
 }
 
 main > #keyboard-container > .keyboard-row > .keyboard-key.special-key {
-	width: auto !important;
-	padding: 0 1rem;
+	width: calc((((100vw - (0.3rem * 9)) - 1rem) / 10) * 1.5);
 }
 
-footer {
-	background-color: #ddd;
+main > #keyboard-container > .keyboard-row > .keyboard-key.special-key > svg {
+	width: 1.25rem;
+	height: 1.25rem;
+	transform: translateY(0.2rem);
+}
+
+@media(min-width: 1024px) {
+	main > #keyboard-container {
+		padding: 1rem 0;
+		row-gap: 0.75rem;
+	}
+
+	main > #keyboard-container > .keyboard-row {
+		column-gap: 0.75rem;
+	}
+
+	main > #keyboard-container > .keyboard-row > .keyboard-key {
+		width: 3.5rem;
+		height: 3.5rem;
+	}
+
+	main > #keyboard-container > .keyboard-row > .keyboard-key.special-key {
+		width: calc(3.5rem * 1.5);
+	}
 }

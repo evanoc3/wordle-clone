@@ -8,6 +8,6 @@ const html = htm.bind(h);
 
 export default function GuessInput(props) {
 	return html`
-		<input maxlength="1" class="letter-input ${props.state}" value=${props.char} disabled=${props.disabled} />
+		<input maxlength="1" inputmode="none" class="letter-input ${props.state}" value=${props.char} disabled=${props.disabled} />
 	`;
 }

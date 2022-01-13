@@ -3,7 +3,7 @@
 import htm from "../htm@3.1.0.js";
 import { h, Component } from "../preact@10.6.4.js";
 import { Letters, State } from "../constants.js";
-import { Footer, GuessesContainer, Header, Keyboard } from "./index.js";
+import { GuessesContainer, Header, Keyboard } from "./index.js";
 
 const html = htm.bind(h);
 
@@ -34,8 +34,6 @@ export default class App extends Component {
 
 				<${Keyboard} charStates=${state.charStates} keyDownFunc=${this.onVirtualKeyDown} />
 			</main>
-
-			<${Footer} />
 		`;
 	}
 
