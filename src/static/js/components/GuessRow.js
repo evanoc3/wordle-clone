@@ -27,7 +27,7 @@ export default class GuessRow extends Component {
 				<div class="guess-row">
 					${
 						props.previousGuessInfo.letters.map(l => {
-							return html`<${GuessInput} disabled char=${l.guess} state=${l.state} />`;
+							return html`<${GuessInput} disabled=${true} char=${l.guess} state=${l.state} />`;
 						})
 					}
 				</div>
@@ -39,14 +39,19 @@ export default class GuessRow extends Component {
 			<form class="guess-row" onsubmit=${this.onSubmit} autocomplete="off">
 				${
 					Array.prototype.map.call(props.guess, c => {
-						return html`<${GuessInput} disabled char=${c} />`;
+						return html`<${GuessInput} disabled=${true} char=${c} />`;
 					})
 				}
 
-				${
-					Array.from(Array(5 - props.guess.length)).map(() => {
-						return html`<${GuessInput} char=""  />`;
-					})
+				${ props.guess.length < 5 ? (
+					html`<${GuessInput} disabled=${props.disabled} char=""  />`
+				) : "" }
+
+				${ props.guess.length + 1 < 5 ? (
+						Array.from(Array(5 - props.guess.length - 1)).map(() => {
+							return html`<${GuessInput} disabled=${true} char=""  />`;
+						})
+					) : ""
 				}
 			</form>
 		`;
@@ -67,51 +72,3 @@ export default class GuessRow extends Component {
 	}
 
 }
-
-/*
-export default function GuessRow(props) {
-	const [guess, setGuess] = useState("");
-	const [inputStates, setInputStates] = useState(["", "", "", "", ""]);
-	const [currentLetter, setCurrentLetter] = useState(0);
-
-	function next(c) {
-		if(currentLetter < 5) {
-			setCurrentLetter(currentLetter + 1);
-			setGuess(guess + c);
-		}
-	};
-
-	function prev(c) {
-		if(currentLetter > 0) {
-			setCurrentLetter(currentLetter - 1);
-		}
-		if(guess.length >= 1 && c === guess[guess.length - 1]) {
-			setGuess(guess.slice(0, guess.length - 1));
-		}
-	};
-
-	async function onSubmit(e) {
-		e.preventDefault();
-		if(guess.length !== 5) {
-			return;
-		}
-
-		const resp = await fetch(`/api/validate?guess=${encodeURIComponent(guess)}`);
-		if(!resp.ok) {
-			console.error(resp);
-		}
-
-		const respBody = await resp.json();
-		console.debug(respBody.letters.map(l => l.isCorrect));
-		setInputStates(respBody.letters.map(l => l.isCorrect));
-
-		if(!respBody.isCorrect) {
-			props.nextGuess();
-		}
-	}
-
-	return html`
-
-	`;
-}
-*/

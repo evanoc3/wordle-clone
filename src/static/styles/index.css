@@ -98,10 +98,29 @@ main > #keyboard-container {
 	height: 35%;
 	width: 100%;
 	background-color: #ddd;
+	display: flex;
+	flex-flow: column nowrap;
+	justify-content: center;
+	align-items: center;
+	row-gap: 0.5rem;
 }
 
-main > #keyboard-container > .keyboard-key {
-	padding: 1rem;
+main > #keyboard-container > .keyboard-row {
+	display: inline-flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	column-gap: 0.5rem;
+}
+
+main > #keyboard-container > .keyboard-row > .keyboard-key {
+	width: 4rem;
+	height: 4rem;
+	font-size: 1.5rem;
+}
+
+main > #keyboard-container > .keyboard-row > .keyboard-key.special-key {
+	width: auto !important;
+	padding: 0 1rem;
 }
 
 footer {

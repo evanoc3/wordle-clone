@@ -11,9 +11,7 @@ export default class GuessesContainer extends Component {
 
 	constructor(props) {
 		super(props);
-
-		this.state = {
-		};
+		this.state = {};
 	}
 
 
@@ -22,7 +20,7 @@ export default class GuessesContainer extends Component {
 			<section id="guesses-container">
 				${
 					props.previousGuessInfo.map(previousGuessInfo => {
-						return html`<${GuessRow} disabled previousGuessInfo=${previousGuessInfo} />`;
+						return html`<${GuessRow} disabled=${true} previousGuessInfo=${previousGuessInfo} />`;
 					})
 				}
 
@@ -30,7 +28,7 @@ export default class GuessesContainer extends Component {
 
 				${
 					Array.from(Array(5 - props.previousGuessInfo.length - 1)).map(() => {
-						return html`<${GuessRow} guess="" disabled />`
+						return html`<${GuessRow} guess="" disabled=${true} />`
 					})
 				}
 				

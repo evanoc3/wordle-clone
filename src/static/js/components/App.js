@@ -15,12 +15,13 @@ export default class App extends Component {
 
 		this.state = {
 			previousGuessInfo: [],
-			guess: "honk",
+			guess: "",
 			charStates: Object.fromEntries(Letters.map(c => [c, State.UNKNOWN])),
 			finished: false
 		};
 
-		this.onKeyDown = this.onKeyDown.bind(this);
+		this.onPhysicalKeyDown = this.onPhysicalKeyDown.bind(this);
+		this.onVirtualKeyDown = this.onVirtualKeyDown.bind(this);
 	}
 
 
@@ -31,7 +32,7 @@ export default class App extends Component {
 			<main>
 				<${GuessesContainer} previousGuessInfo=${state.previousGuessInfo} guess=${state.guess} submitFunc=${this.submitGuess} />
 
-				<${Keyboard} charStates=${state.charStates} />
+				<${Keyboard} charStates=${state.charStates} keyDownFunc=${this.onVirtualKeyDown} />
 			</main>
 
 			<${Footer} />
@@ -40,15 +41,15 @@ export default class App extends Component {
 
 
 	componentDidMount() {
-		window.addEventListener("keydown", this.onKeyDown);
+		window.addEventListener("keydown", this.onPhysicalKeyDown);
 	}
 
 	componentWillUnmount() {
-		window.removeEventListener("keydown", this.onKeyDown);
+		window.removeEventListener("keydown", this.onPhysicalKeyDown);
 	}
 
 
-	onKeyDown(e) {
+	onPhysicalKeyDown(e) {
 		if(e.metaKey) {
 			return;
 		}
@@ -68,7 +69,19 @@ export default class App extends Component {
 		else if(e.key === "Enter") {
 			if(this.state.guess.length === 5) {
 				this.submitGuess().then(resp => {
-					this.updateCharacterInformation(resp.letters);
+					if(resp.error) {
+						console.error(resp.error);
+					}
+					else {
+						if(!resp.error) {
+							this.setState({
+								previousGuessInfo: [...this.state.previousGuessInfo, resp],
+								guess: "",
+								finished: resp.isCorrect
+							});
+						}
+						this.updateCharacterInformation(resp.letters);
+					}
 				});
 			}
 		}
@@ -83,22 +96,11 @@ export default class App extends Component {
 		const resp = await fetch(`/api/validate?guess=${encodeURIComponent(this.state.guess)}`);
 		if(!resp.ok) {
 			console.error(resp.statusText);
+			alert("Oops something went wrong. Please try again later");
 			return;
 		}
 
 		const respBody = await resp.json();
-
-		if(respBody.error === "Word not recognised") {
-			alert("Word not recognised");
-			return
-		}
-
-		this.setState({
-			previousGuessInfo: [...this.state.previousGuessInfo, respBody],
-			guess: "",
-			finished: respBody.isCorrect
-		});
-
 		return respBody;
 	}
 
@@ -113,6 +115,12 @@ export default class App extends Component {
 		this.setState({
 			charStates: charStates
 		});
+	}
+
+
+	onVirtualKeyDown(char) {
+		const fakeKeyDownEvent = { key: char, preventDefault: () => {} };
+		this.onPhysicalKeyDown(fakeKeyDownEvent);
 	}
 
 }
