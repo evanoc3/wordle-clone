@@ -25,13 +25,16 @@ func createServer() http.Server {
 
 
 func setupApiRoutes(mux *http.ServeMux) {
-	mux.HandleFunc("/api/test", func(res http.ResponseWriter, req *http.Request) {
-		res.Header().Set("Content-Type", "text/plain")
-		res.WriteHeader(http.StatusOK)
-		fmt.Fprintf(res, "Hello, World!")
-	})
-
+	mux.HandleFunc("/api/test", apiRouteTest)
+	mux.HandleFunc("/api/day", apiRouteGetDay)
 	mux.HandleFunc("/api/validate", apiRouteValidateWord)
+}
+
+
+func apiRouteTest(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("Content-Type", "text/plain")
+	res.WriteHeader(http.StatusOK)
+	fmt.Fprintf(res, "Hello, World!")
 }
 
 
@@ -104,4 +107,24 @@ func validateLetter(i int, c byte) validatedLetterResponse {
 		Guess: string(c),
 		State: state,
 	}
+}
+
+
+type getDayApiResponse struct {
+	Timestamp string `json:"timestamp"`
+	Day int `json:"day"`
+}
+
+
+func apiRouteGetDay(res http.ResponseWriter, req *http.Request) {
+	var responseBody getDayApiResponse
+	responseBody.Timestamp = time.Now().Format(time.RFC3339)
+
+	res.Header().Set("Content-Type", "application/json")
+	res.Header().Set("Cache-Control", "no-store")
+	res.WriteHeader(http.StatusOK)
+
+	responseBody.Day = getDay()
+
+	json.NewEncoder(res).Encode(responseBody)
 }

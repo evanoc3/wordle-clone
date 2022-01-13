@@ -24,7 +24,8 @@ export default class GuessesContainer extends Component {
 					})
 				}
 
-				<${GuessRow} guess=${props.guess} disabled=${false} />
+				<${GuessRow} guess=${props.guess} disabled=${props.finished} />
+				
 
 				${
 					Array.from(Array(5 - props.previousGuessInfo.length - 1)).map(() => {

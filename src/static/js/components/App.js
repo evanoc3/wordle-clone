@@ -2,8 +2,9 @@
 
 import htm from "../lib/htm@3.1.0.js";
 import { h, Component } from "../lib/preact@10.6.4.js";
-import { Letters, State } from "../constants.js";
+import { Letters } from "../constants.js";
 import { GuessesContainer, Header, Keyboard } from "./index.js";
+import localStorageManager, { LocalStorageManager } from "../LocalStorageManager.js";
 
 const html = htm.bind(h);
 
@@ -13,12 +14,7 @@ export default class App extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {
-			previousGuessInfo: [],
-			guess: "",
-			charStates: Object.fromEntries(Letters.map(c => [c, State.UNKNOWN])),
-			finished: false
-		};
+		this.state = Object.assign({}, LocalStorageManager.DEFAULT_STATE);
 
 		this.onPhysicalKeyDown = this.onPhysicalKeyDown.bind(this);
 		this.onVirtualKeyDown = this.onVirtualKeyDown.bind(this);
@@ -30,7 +26,7 @@ export default class App extends Component {
 			<${Header} />
 
 			<main>
-				<${GuessesContainer} previousGuessInfo=${state.previousGuessInfo} guess=${state.guess} submitFunc=${this.submitGuess} />
+				<${GuessesContainer} previousGuessInfo=${state.previousGuessInfo} guess=${state.guess} submitFunc=${this.submitGuess} finished=${state.finished} />
 
 				<${Keyboard} charStates=${state.charStates} keyDownFunc=${this.onVirtualKeyDown} />
 			</main>
@@ -39,6 +35,11 @@ export default class App extends Component {
 
 
 	componentDidMount() {
+		localStorageManager.getCurrentDay().then(day => {
+			localStorageManager.initialize(day);
+			this.setState( localStorageManager.getCurrentState() );
+		});
+
 		window.addEventListener("keydown", this.onPhysicalKeyDown);
 	}
 
@@ -48,7 +49,7 @@ export default class App extends Component {
 
 
 	onPhysicalKeyDown(e) {
-		if(e.metaKey) {
+		if(e.metaKey || this.state.finished) {
 			return;
 		}
 
@@ -56,12 +57,16 @@ export default class App extends Component {
 
 		if(Letters.includes(e.key)) {
 			if(this.state.guess.length < 5) {
-				this.setState({ guess: this.state.guess + e.key });
+				const newGuess = this.state.guess + e.key;
+				this.setState({ guess: newGuess });
+				localStorageManager.updateCurrentGuess(newGuess);
 			}
 		}
 		else if(e.key === "Backspace") {
 			if(this.state.guess.length > 0) {
-				this.setState({ guess: this.state.guess.slice(0, this.state.guess.length - 1) });
+				const newGuess = this.state.guess.slice(0, this.state.guess.length - 1);
+				this.setState({ guess: newGuess});
+				localStorageManager.updateCurrentGuess(newGuess);
 			}
 		}
 		else if(e.key === "Enter") {
@@ -69,16 +74,20 @@ export default class App extends Component {
 				this.submitGuess().then(resp => {
 					if(resp.error) {
 						console.error(resp.error);
+						alert(resp.error);
+						return
 					}
-					else {
-						if(!resp.error) {
-							this.setState({
-								previousGuessInfo: [...this.state.previousGuessInfo, resp],
-								guess: "",
-								finished: resp.isCorrect
-							});
-						}
-						this.updateCharacterInformation(resp.letters);
+
+					if(resp.error === "") {
+						this.setState({
+							previousGuessInfo: [...this.state.previousGuessInfo, resp],
+							guess: "",
+							finished: resp.isCorrect
+						});
+
+						const newCharStates = this.updateCharacterInformation(resp.letters);
+
+						localStorageManager.addGuessInfo(resp, newCharStates, resp.isCorrect);
 					}
 				});
 			}
@@ -113,6 +122,8 @@ export default class App extends Component {
 		this.setState({
 			charStates: charStates
 		});
+
+		return charStates;
 	}
 
 

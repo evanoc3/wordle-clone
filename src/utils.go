@@ -1,5 +1,7 @@
 package main
 
+import "time"
+
 
 func containsByte(elems []byte, c byte) bool {
 	for _, s := range elems {
@@ -18,4 +20,12 @@ func containsString(elems []string, s string) bool {
 		}
 	}
 	return false
+}
+
+
+func getDay() int {
+	now := time.Now()
+	year := now.Year() - 2022
+	yearDay := now.YearDay()
+	return ((year * 366) + yearDay) % len(dictionary)
 }

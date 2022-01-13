@@ -30,11 +30,12 @@ func main() {
 
 func chooseWord() {
 	for true {
-		now := time.Now()
-		year := now.Year() - 2022
-		yearDay := now.YearDay()
-		index := ((year * 366) + yearDay) % len(dictionary)
-		word = dictionary[index]
+		index := getDay()
+		new_word := dictionary[index]
+		if word == "" || new_word != word {
+			log.Printf("Choosing word: %s\n", new_word)
+		}
+		word = new_word
 		time.Sleep(time.Minute)
 	}
 }

@@ -34,7 +34,7 @@ export default class GuessRow extends Component {
 			`;
 		}
 
-		// Otherwise, it is an editable row
+		// Otherwise, it might be an editable row
 		return html`
 			<form class="guess-row" onsubmit=${this.onSubmit} autocomplete="off">
 				${
@@ -44,12 +44,12 @@ export default class GuessRow extends Component {
 				}
 
 				${ props.guess.length < 5 ? (
-					html`<${GuessInput} disabled=${props.disabled} char=""  />`
+					html`<${GuessInput} disabled=${props.disabled} char="" />`
 				) : "" }
 
 				${ props.guess.length + 1 < 5 ? (
 						Array.from(Array(5 - props.guess.length - 1)).map(() => {
-							return html`<${GuessInput} disabled=${true} char=""  />`;
+							return html`<${GuessInput} disabled=${true} char="" />`;
 						})
 					) : ""
 				}
