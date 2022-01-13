@@ -1,7 +1,7 @@
 "use strict";
 
-import htm from "../htm@3.1.0.js";
-import { h } from "../preact@10.6.4.js";
+import htm from "../lib/htm@3.1.0.js";
+import { h } from "../lib/preact@10.6.4.js";
 
 const html = htm.bind(h);
 
