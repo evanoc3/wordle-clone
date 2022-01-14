@@ -25,7 +25,7 @@ export class LocalStorageManager {
 		this.day = day;
 		this.state[day] = Object.assign({}, LocalStorageManager.DEFAULT_STATE);
 
-		if(! localStorage in window) {
+		if(!("localStorage" in window)) {
 			return;
 		}
 
@@ -36,12 +36,11 @@ export class LocalStorageManager {
 
 		const localStorageJson = JSON.parse(localStorageBlob);
 
-		if(!day in localStorageJson) {
+		if(!(day in localStorageJson)) {
 			localStorageJson[day] = Object.assign({}, LocalStorageManager.DEFAULT_STATE);
 		}
 
 		this.state = localStorageJson;
-
 		return;
 	}
 
@@ -80,8 +79,18 @@ export class LocalStorageManager {
 
 
 	#writeToLocalStorage() {
+		if(!("localStorage" in window)) {
+			return;
+		}
+
 		localStorage.setItem(LocalStorageManager.KEY, JSON.stringify(this.state));
 	}
+
+
+	getAllState() {
+		return this.state;
+	}
+
 }
 
 

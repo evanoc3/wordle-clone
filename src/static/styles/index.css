@@ -47,11 +47,11 @@
 	--keyboard-key-correct-border-colour: #005700;
 	--keyboard-key-correct-font-colour: #397639;
 }
-/*
+
 @media (prefers-color-scheme: dark) {
 	:root {
 		--font-colour: white;
-		--background-colour: black;
+		--background-colour: #161616;
 	
 		--input-background-colour: #6d6d6d;
 		--input-border-colour: green;
@@ -61,7 +61,7 @@
 		--input-disabled-border-colour: #5e5e5e;
 		--input-disabled-font-colour: #e4e4e4;
 	
-		--keyboard-background-colour: #545454;
+		--keyboard-background-colour: #242424;
 	
 		--keyboard-key-background-colour: #6d6d6d;
 		--keyboard-key-border-colour: #707070;
@@ -72,7 +72,7 @@
 		--keyboard-key-pressed-font-colour: white;
 	}
 }
-*/
+
 
 * {
 	margin: 0;
@@ -97,13 +97,37 @@ body {
 header {
 	width: 100%;
 	background-color: var(--header-background-colour);
-	padding: 1rem;
+	padding: env(safe-area-inset-top) 1rem 0;
 	height: calc(4rem + env(safe-area-inset-top));
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
 }
 
 header > h1 {
 	color: var(--header-title-font-colour);
 	font-size: 2rem;
+	flex-grow: 1;
+}
+
+header > #more-button {
+	/* clear default button styles */
+	border: none;
+	background: none;
+	border: none;
+	outline: none;
+	/* Style from scratch */
+	cursor: pointer;
+}
+
+header > #more-button:hover {
+	background-color: #005900;
+}
+
+header > #more-button > svg {
+	color: white;
+	width: 2rem;
+	height: 2rem;
 }
 
 
@@ -143,6 +167,7 @@ main > #guesses-container > .guess-row > .letter-input {
 	background-color: var(--input-background-colour);
 	text-align: center;
 	color: var(--input-font-colour);
+	cursor: text;
 }
 
 main > #guesses-container > .guess-row > .letter-input:disabled {
@@ -150,6 +175,7 @@ main > #guesses-container > .guess-row > .letter-input:disabled {
 	border-color: var(--input-disabled-border-colour);
 	color: var(--input-disabled-font-colour);
 	opacity: 1;
+	cursor: default;
 }
 
 main > #guesses-container > .guess-row > .letter-input.wrong {
@@ -204,6 +230,7 @@ main > #keyboard-container > .keyboard-row > .keyboard-key {
 	background-color: var(--keyboard-key-background-colour);
 	border-radius: 0.3rem;
 	border: 1px solid var(--keyboard-key-border-colour);
+	cursor: pointer;
 }
 
 main > #keyboard-container > .keyboard-row > .keyboard-key:active {
@@ -258,4 +285,85 @@ main > #keyboard-container > .keyboard-row > .keyboard-key.special-key > svg {
 	main > #keyboard-container > .keyboard-row > .keyboard-key.special-key {
 		width: calc(3.5rem * 1.5);
 	}
+}
+
+
+.popup-background {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0, 0.5);
+	z-index: 100;
+	display: none; /* hide by default */
+}
+
+.popup-background.showing {
+	display: block !important;
+}
+
+.popup-background > .popup {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: var(--background-colour);
+	width: 90vw;
+	height: 80vh;
+	box-shadow: 0.25rem 0.25rem 0.75rem rgba(0,0,0, 0.3);
+	padding: 1.5rem;
+	border-radius: 0.3rem;
+}
+
+@media(min-width: 768px) {
+	.popup-background > .popup {
+		width: 30rem;
+		height: 40rem;
+	}
+}
+
+.popup-background > .popup > .popup-close-button {
+	/* clear default button styles */
+	border: none;
+	background: none;
+	border: none;
+	outline: none;
+	/* style from scratch */
+	position: absolute;
+	top: 1.5rem;
+	right: 1.5rem;
+	cursor: pointer;
+	color: var(--font-colour);
+}
+
+.popup-background > .popup > .popup-close-button > svg {
+	width: 1.5rem;
+	height: 1.5rem;
+}
+
+.popup-background > .popup > h2 {
+	margin-bottom: 1.5rem;
+}
+
+
+.popup-background > #stats-popup > #stats-row {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: center;
+}
+
+.popup-background > #stats-popup > #stats-row > .stat-container {
+	width: 25%;
+	text-align: center;
+}
+
+.popup-background > #stats-popup > #stats-row > .stat-container > .stat {
+	font-size: 1.75rem;
+	margin-bottom: 0.5rem;
+}
+
+
+.popup-background > #stats-popup > #stats-row > .stat-container > .stat-label {
+	font-size: 0.9rem;
 }

@@ -10,7 +10,7 @@ export default function KeyboardKey(props) {
 	const specialKeyClass = props.char === "Enter" || props.char === "Backspace" ? "special-key" : "";
 	
 	return html`
-		<button class="keyboard-key ${specialKeyClass} ${props.charState}" onclick=${() => props.keyDownFunc(props.char)}>
+		<button class="keyboard-key ${specialKeyClass} ${props.charState}" onclick=${() => props.keyDownFunc(props.char)} title=${props.char}>
 			${ props.char === "Enter" ? enterKeyIcon : "" }
 			${ props.char === "Backspace" ? backspaceKeyIcon : "" }
 			${ props.char !== "Enter" && props.char !== "Backspace" ? props.char : "" }

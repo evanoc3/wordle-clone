@@ -3,7 +3,7 @@
 import htm from "../lib/htm@3.1.0.js";
 import { h, Component } from "../lib/preact@10.6.4.js";
 import { Letters } from "../constants.js";
-import { GuessesContainer, Header, Keyboard } from "./index.js";
+import { GuessesContainer, Header, Keyboard, StatsPopup } from "./index.js";
 import localStorageManager, { LocalStorageManager } from "../LocalStorageManager.js";
 
 const html = htm.bind(h);
@@ -14,22 +14,28 @@ export default class App extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = Object.assign({}, LocalStorageManager.DEFAULT_STATE);
+		this.state = {
+			...Object.assign({}, LocalStorageManager.DEFAULT_STATE),
+			statsPopupShowing: false
+		}
 
 		this.onPhysicalKeyDown = this.onPhysicalKeyDown.bind(this);
 		this.onVirtualKeyDown = this.onVirtualKeyDown.bind(this);
+		this.setStatsPopupShowing = this.setStatsPopupShowing.bind(this);
 	}
 
 
 	render(props, state) {
 		return html`
-			<${Header} />
+			<${Header} setStatsPopupShowingFunc=${this.setStatsPopupShowing} />
 
 			<main>
 				<${GuessesContainer} previousGuessInfo=${state.previousGuessInfo} guess=${state.guess} submitFunc=${this.submitGuess} finished=${state.finished} />
 
 				<${Keyboard} charStates=${state.charStates} keyDownFunc=${this.onVirtualKeyDown} />
 			</main>
+
+			<${StatsPopup} showing=${state.statsPopupShowing} setShowingFunc=${this.setStatsPopupShowing} />
 		`;
 	}
 
@@ -49,7 +55,7 @@ export default class App extends Component {
 
 
 	onPhysicalKeyDown(e) {
-		if(e.metaKey || this.state.finished) {
+		if(e.metaKey || this.state.finished || this.state.statsPopupShowing) {
 			return;
 		}
 
@@ -75,7 +81,7 @@ export default class App extends Component {
 					if(resp.error) {
 						console.error(resp.error);
 						alert(resp.error);
-						return
+						return;
 					}
 
 					if(resp.error === "") {
@@ -130,6 +136,13 @@ export default class App extends Component {
 	onVirtualKeyDown(char) {
 		const fakeKeyDownEvent = { key: char, preventDefault: () => {} };
 		this.onPhysicalKeyDown(fakeKeyDownEvent);
+	}
+
+
+	setStatsPopupShowing(showing) {
+		this.setState({
+			statsPopupShowing: showing
+		});
 	}
 
 }
