@@ -1,3 +1,6 @@
+# binary output directory
 out/
+
+# big text files containing words for game
 src/data/words_alpha.txt
 src/data/words.txt
