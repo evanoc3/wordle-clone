@@ -2,7 +2,7 @@
 
 import htm from "../lib/htm@3.1.0.js";
 import { h, Component } from "../lib/preact@10.6.4.js";
-import { Popup } from "./index.js";
+import { Popup, SolutionDistributionGraph } from "./index.js";
 import localStorageManager from "../LocalStorageManager.js";
 
 const html = htm.bind(h);
@@ -22,7 +22,7 @@ export default class StatsPopup extends Component {
 	render(props, state) {
 		return html`
 			<${Popup} showing=${props.showing} setShowingFunc=${props.setShowingFunc} id="stats-popup">
-				<h2>Stats</h2>
+				<h2>Statistics</h2>
 
 				<div id="stats-row">
 					${
@@ -61,8 +61,20 @@ export default class StatsPopup extends Component {
 						` : ""
 					}
 				</div>
+
+
+				${
+					state.data ? html `
+						<h2>Solution Distribution</h2>
+						<${SolutionDistributionGraph} data=${this.#getSolutionDistribution()} />
+					` : ""
+				}
 			</${Popup}>
 		`;
+	}
+
+
+	componentDidMount() {
 	}
 
 
@@ -127,6 +139,35 @@ export default class StatsPopup extends Component {
 	#getMaxStreak() {
 		const streaks = Object.keys(this.state.data).map(day => this.#getStreak(day));
 		return Math.max(...streaks);
+	}
+
+
+	#getSolutionDistribution() {
+		if(!this.state.data) {
+			return;
+		}
+
+		const guessesToSolve = {
+			1: 0,
+			2: 0,
+			3: 0,
+			4: 0,
+			5: 0,
+			unfinished: 0
+		};
+
+		for(const day in this.state.data) {
+			if(!this.state.data[day].finished) {
+				if(this.state.data[day].guess.length || this.state.data[day].previousGuessInfo.length) {
+					guessesToSolve.unfinished++;
+				}
+			}
+			else {
+				guessesToSolve[this.state.data[day].previousGuessInfo.length]++;
+			}
+		}
+
+		return guessesToSolve;
 	}
 
 }

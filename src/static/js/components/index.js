@@ -8,6 +8,7 @@ import Keyboard from "./Keyboard.js";
 import KeyboardKey from "./KeyboardKey.js";
 import Popup from "./Popup.js";
 import StatsPopup from "./StatsPopup.js";
+import SolutionDistributionGraph from "./SolutionDistributionGraph.js";
 
 export {
 	GuessesContainer,
@@ -17,5 +18,6 @@ export {
 	Keyboard,
 	KeyboardKey,
 	Popup,
-	StatsPopup
+	StatsPopup,
+	SolutionDistributionGraph
 };
