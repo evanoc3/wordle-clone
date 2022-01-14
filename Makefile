@@ -5,4 +5,4 @@
 
 build:
 	mkdir -p out
-	go build -tags "release" -o out/wordle  wordle.evanoconnor.ie/src
+	go build -tags "release" -o out/wordle  wordle/src
