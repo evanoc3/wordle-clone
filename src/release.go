@@ -15,10 +15,10 @@ import (
 var staticFS embed.FS
 
 //go:embed data/dictionary.txt
-var dictionaryFile embed.FS
+var dictionaryFs embed.FS
 
 //go:embed data/word_choices.txt
-var wordChoicesFile embed.FS
+var wordChoicesFs embed.FS
 
 
 func setupStaticFsRoutes(mux *http.ServeMux) {
@@ -27,8 +27,8 @@ func setupStaticFsRoutes(mux *http.ServeMux) {
 }
 
 
-func readWordsFromEmbedFS(filename string) {
-	wordFileContent, err := wordsFile.ReadFile(filename)
+func readWordsFromEmbedFS(embedFs embed.FS, filename string) []string {
+	wordFileContent, err := embedFs.ReadFile(filename)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -37,10 +37,10 @@ func readWordsFromEmbedFS(filename string) {
 
 
 func readWordChoices() []string {
-	return readWordsFromEmbedFS("data/word_choices.txt")
+	return readWordsFromEmbedFS(wordChoicesFs, "data/word_choices.txt")
 }
 
 
 func readDictionary() []string {
-	return readWordsFromEmbedFS("data/dictionary.txt")
+	return readWordsFromEmbedFS(dictionaryFs, "data/dictionary.txt")
 }
