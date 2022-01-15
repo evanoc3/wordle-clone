@@ -25,14 +25,14 @@ export default class GuessesContainer extends Component {
 				}
 
 				${
-					props.previousGuessInfo.length < 5 ? html`
+					props.previousGuessInfo.length < 6 ? html`
 						<${GuessRow} guess=${props.guess} disabled=${props.finished} />
 					` : ""
 				}
 
 				${
-					props.previousGuessInfo.length + 1 < 5 ? (
-						Array.from(Array(5 - props.previousGuessInfo.length - 1)).map(() => {
+					props.previousGuessInfo.length + 1 < 6 ? (
+						Array.from(Array(6 - props.previousGuessInfo.length - 1)).map(() => {
 							return html`<${GuessRow} guess="" disabled=${true} />`
 						})
 					) : ""
