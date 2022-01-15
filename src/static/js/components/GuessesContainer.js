@@ -24,13 +24,18 @@ export default class GuessesContainer extends Component {
 					})
 				}
 
-				<${GuessRow} guess=${props.guess} disabled=${props.finished} />
-				
+				${
+					props.previousGuessInfo.length < 5 ? html`
+						<${GuessRow} guess=${props.guess} disabled=${props.finished} />
+					` : ""
+				}
 
 				${
-					Array.from(Array(5 - props.previousGuessInfo.length - 1)).map(() => {
-						return html`<${GuessRow} guess="" disabled=${true} />`
-					})
+					props.previousGuessInfo.length + 1 < 5 ? (
+						Array.from(Array(5 - props.previousGuessInfo.length - 1)).map(() => {
+							return html`<${GuessRow} guess="" disabled=${true} />`
+						})
+					) : ""
 				}
 				
 			</section>
