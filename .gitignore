@@ -2,5 +2,7 @@
 out/
 
 # big text files containing words for game
-src/data/words_alpha.txt
-src/data/words.txt
+src/data/raw_dictionary.txt
+src/data/dictionary.txt
+src/data/word_choices.txt
+src/data/raw_word_choices.txt

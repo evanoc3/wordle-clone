@@ -79,9 +79,12 @@ export default class App extends Component {
 			if(this.state.guess.length === 5) {
 				this.submitGuess().then(resp => {
 					if(resp.error) {
-						console.error(resp.error);
-						alert(resp.error);
-						return;
+						if(resp.error === "Word not recognised") {
+							alert(resp.error);
+						}
+						else {
+							console.error(resp.error);
+						}
 					}
 
 					if(resp.error === "") {

@@ -15,7 +15,7 @@ export default class GuessesContainer extends Component {
 	}
 
 
-	render(props, state) {
+	render(props) {
 		return html`
 			<section id="guesses-container">
 				${
