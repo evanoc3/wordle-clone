@@ -40,7 +40,7 @@ func apiRouteTest(res http.ResponseWriter, req *http.Request) {
 
 type validatedLetterResponse struct {
 	Guess string `json:"guess"`
-	State string `json:"state"`
+	State GuessState `json:"state"`
 }
 
 
@@ -81,32 +81,44 @@ func apiRouteValidateWord(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	responseBody.Letters = append(responseBody.Letters, validateLetter(0, letters[0]))
-	responseBody.Letters = append(responseBody.Letters, validateLetter(1, letters[1]))
-	responseBody.Letters = append(responseBody.Letters, validateLetter(2, letters[2]))
-	responseBody.Letters = append(responseBody.Letters, validateLetter(3, letters[3]))
-	responseBody.Letters = append(responseBody.Letters, validateLetter(4, letters[4]))
+	responseBody.Letters = validateGuessLetters(letters, []byte(word))
 	
 	json.NewEncoder(res).Encode(responseBody)
 }
 
 
-func validateLetter(i int, c byte) validatedLetterResponse {
-	correct := c == word[i]
-	partial := containsByte([]byte(word), c)
-
-	var state string = GUESS_STATE_WRONG
-	if partial {
-		state = GUESS_STATE_PARTIAL
-	}
-	if correct {
-		state = GUESS_STATE_CORRECT
+func validateGuessLetters(guess []byte, word []byte) []validatedLetterResponse {
+	wordLetterMap := make(map[int]byte, 5)
+	for i, c := range word {
+		wordLetterMap[i] = c
 	}
 
-	return validatedLetterResponse{
-		Guess: string(c),
-		State: state,
+	guessLetterResponses := make([]validatedLetterResponse, 5)
+
+	for i := 0; i < 5; i++ {
+		guessLetterResponses[i].Guess = string(guess[i])
+
+		if guess[i] == wordLetterMap[i] {
+			delete(wordLetterMap, i)
+			guessLetterResponses[i].State = CORRECT
+		}
 	}
+
+	if len(wordLetterMap) > 0 {
+		for i := range guessLetterResponses {
+			if guessLetterResponses[i].State != "" {
+				continue
+			}
+
+			if mapContains(wordLetterMap, guess[i]) {
+				guessLetterResponses[i].State = PARTIAL
+			} else {
+				guessLetterResponses[i].State = WRONG
+			}
+		}
+	}
+
+	return guessLetterResponses
 }
 
 

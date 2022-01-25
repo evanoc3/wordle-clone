@@ -6,9 +6,12 @@ import (
 )
 
 
-const GUESS_STATE_CORRECT string = "correct"
-const GUESS_STATE_PARTIAL string = "partial"
-const GUESS_STATE_WRONG string = "wrong"
+type GuessState string
+const (
+	CORRECT GuessState = "correct"
+	PARTIAL GuessState = "partial"
+	WRONG GuessState = "wrong"
+)
 
 
 var dictionary []string
