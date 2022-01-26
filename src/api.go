@@ -3,7 +3,10 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -15,12 +18,29 @@ func createServer() http.Server {
 	setupStaticFsRoutes(mux)
 
 	server := http.Server{
-		Addr: ":8080",
+		Addr: getServerInterface(),
 		Handler: mux,
 		ReadTimeout: 5 * time.Second,
 	}
 
 	return server
+}
+
+
+func getServerInterface() string {
+	var port int = 8080
+
+	env_port, env_port_is_set := os.LookupEnv("PORT")
+	if env_port_is_set && env_port != "" {
+		env_port_int, err := strconv.Atoi(env_port)
+		if err == nil && env_port_int > 1024 {
+			port = env_port_int
+		}
+	}
+
+	log.Printf("Running on port: %d\n", port)
+	
+	return fmt.Sprintf(":%d", port)
 }
 
 
