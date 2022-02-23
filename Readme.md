@@ -2,13 +2,15 @@
 
 A web app which replicates the gameplay and functionality of [Wordle](https://www.powerlanguage.co.uk/wordle).
 
-## Features:
+## To do
 
-* **Responsive**: designed for both desktop and mobile screens,
-* **Input**: both physical and on-screen keyboard supported,
-* **Theme**: dark theme support (for users with dark theme enabled in their OS/browser),
-* **Persistance**: maintains current game state across page reloads, and records past days state (using localStorage),
-* **Analysis**: View gameplay statistics and your solution distribution graph,
+- [x] **Responsive**: works well on both desktop and phone screen sizes,
+- [x] **Input**: allows input from the on-screen keyboard, and on laptops, the physical keyboard too,
+- [x] **Theme**: dark-theme automatically enabled if the user's OS or browser specifies it,
+- [x] **Persistence**: Current and past game progress is stored locally, and will persist across page reloads (using LocalStorage),
+- [x] **Analysis**: Popup containing current and past gameplay statistics, and a graph of your solution distribution,
+- [ ] **Share**: button which copies an emoji representation of the current guesses to the clipboard,
+- [ ] **Hard mode**: in which all your previously unearthed clues must be used in each subsequent guesses
 
 
 ## Setup
