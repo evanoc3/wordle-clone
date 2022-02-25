@@ -3,7 +3,7 @@
 import htm from "../lib/htm@3.1.0.js";
 import { h, Component } from "../lib/preact@10.6.4.js";
 import { Letters } from "../constants.js";
-import { GuessesContainer, Header, Keyboard, StatsPopup } from "./index.js";
+import { GuessesContainer, Header, Keyboard, MorePopup, StatsPopup } from "./index.js";
 import localStorageManager, { LocalStorageManager } from "../LocalStorageManager.js";
 
 const html = htm.bind(h);
@@ -16,18 +16,20 @@ export default class App extends Component {
 
 		this.state = {
 			...Object.assign({}, LocalStorageManager.DEFAULT_STATE),
-			statsPopupShowing: false
+			statsPopupShowing: false,
+			morePopupShowing: false
 		}
 
 		this.onPhysicalKeyDown = this.onPhysicalKeyDown.bind(this);
 		this.onVirtualKeyDown = this.onVirtualKeyDown.bind(this);
 		this.setStatsPopupShowing = this.setStatsPopupShowing.bind(this);
+		this.setMorePopupShowing = this.setMorePopupShowing.bind(this);
 	}
 
 
 	render(props, state) {
 		return html`
-			<${Header} setStatsPopupShowingFunc=${this.setStatsPopupShowing} />
+			<${Header} setStatsPopupShowingFunc=${this.setStatsPopupShowing} setMorePopupShowingFunc=${this.setMorePopupShowing} />
 
 			<main>
 				<${GuessesContainer} previousGuessInfo=${state.previousGuessInfo} guess=${state.guess} submitFunc=${this.submitGuess} finished=${state.finished} />
@@ -36,6 +38,7 @@ export default class App extends Component {
 			</main>
 
 			<${StatsPopup} showing=${state.statsPopupShowing} setShowingFunc=${this.setStatsPopupShowing} />
+			<${MorePopup} showing=${state.morePopupShowing} setShowingFunc=${this.setMorePopupShowing} />
 		`;
 	}
 
@@ -145,6 +148,12 @@ export default class App extends Component {
 	setStatsPopupShowing(showing) {
 		this.setState({
 			statsPopupShowing: showing
+		});
+	}
+
+	setMorePopupShowing(showing) {
+		this.setState({
+			morePopupShowing: showing
 		});
 	}
 

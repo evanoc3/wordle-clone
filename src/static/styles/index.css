@@ -5,6 +5,9 @@
 	--header-background-colour: green;
 	--header-title-font-colour: white;
 
+	--header-button-hover-background-colour: #005900;
+	--header-button-icon-colour: white;
+
 	--input-background-colour: white;
 	--input-border-colour: green;
 	--input-font-colour: black;
@@ -51,6 +54,9 @@
 	--popup-box-shadow: rgba(0,0,0, 0.3);
 
 	--distribution-graph-bar-colour: magenta;
+
+	--switch-background-colour: green;
+	--switch-button-colour: white;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -117,7 +123,7 @@ header > h1 {
 	flex-grow: 1;
 }
 
-header > #more-button {
+header > button {
 	/* clear default button styles */
 	border: none;
 	background: none;
@@ -127,12 +133,16 @@ header > #more-button {
 	cursor: pointer;
 }
 
-header > #more-button:hover {
-	background-color: #005900;
+header > button:not(:last-of-type) {
+	margin-right: 0.5rem;
 }
 
-header > #more-button > svg {
-	color: white;
+header > button:hover {
+	background-color: var(--header-button-hover-background-colour);
+}
+
+header > button > svg {
+	color: var(--header-button-icon-colour);
 	width: 2rem;
 	height: 2rem;
 }
@@ -390,3 +400,35 @@ main > #keyboard-container > .keyboard-row > .keyboard-key.special-key > svg {
 	flex-grow: 1;
 	width: 100%;
 } 
+
+
+.switch {
+	display: none;
+	border: none;
+	background: none;
+
+	display: inline-block;
+
+	width: 3rem;
+	height: 1.5rem;
+	border-radius: 0.75rem;
+	background-color: var(--switch-background-colour);
+
+	position: relative;
+}
+
+.switch::after {
+	content: "";
+	position: absolute;
+	height: 1.3rem;
+	width: 1.3rem;
+	border-radius: calc(1.3rem / 2);
+	background-color: var(--switch-button-colour);
+	top: 0.1rem;
+	left: 0.1rem;
+	transition: left 0.25s;
+}
+
+.switch.active::after {
+	left: calc(100% - 1.3rem - 0.1rem);
+}

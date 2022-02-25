@@ -6,9 +6,12 @@ import GuessRow from "./GuessRow.js";
 import Header from "./Header.js";
 import Keyboard from "./Keyboard.js";
 import KeyboardKey from "./KeyboardKey.js";
+import MorePopup from "./MorePopup.js";
 import Popup from "./Popup.js";
-import StatsPopup from "./StatsPopup.js";
 import SolutionDistributionGraph from "./SolutionDistributionGraph.js";
+import StatsPopup from "./StatsPopup.js";
+import Switch from "./Switch.js";
+
 
 export {
 	GuessesContainer,
@@ -17,7 +20,9 @@ export {
 	Header,
 	Keyboard,
 	KeyboardKey,
+	MorePopup,
 	Popup,
+	SolutionDistributionGraph,
 	StatsPopup,
-	SolutionDistributionGraph
+	Switch
 };
