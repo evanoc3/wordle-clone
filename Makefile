@@ -5,4 +5,4 @@
 
 build:
 	mkdir -p out
-	go build -tags "release" -o out/wordle  wordle/src
+	go build -tags "release" -o out/wordle github.com/evanoc3/wordle/cmd

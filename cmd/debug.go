@@ -38,10 +38,10 @@ func readWordsFromTextFile(filename string) []string {
 
 
 func readWordChoices() []string {
-	return readWordsFromTextFile("src/data/word_choices.txt")
+	return readWordsFromTextFile("cmd/data/word_choices.txt")
 }
 
 
 func readDictionary() []string {
-	return readWordsFromTextFile("src/data/dictionary.txt")
+	return readWordsFromTextFile("cmd/data/dictionary.txt")
 }

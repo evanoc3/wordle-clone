@@ -1,6 +1,6 @@
 # Wordle clone
 
-A web app which replicates the gameplay and functionality of [Wordle](https://www.powerlanguage.co.uk/wordle).
+A web app which replicates the gameplay and functionality of [Wordle](https://www.nytimes.com/games/wordle/index.html).
 
 ## To do
 
@@ -15,13 +15,13 @@ A web app which replicates the gameplay and functionality of [Wordle](https://ww
 
 ## Setup
 
-Before you can run the app, you must provide two text files: one from which the app will determine whether a word is valid or not, and the other from which the app will choose a new word for eath day from. These two text files are both in the same format: one 5-letter word per line, and should be located at `src/data/dictionary.txt` and `src/data/word_choices.txt` respectively.
+Before you can run the app, you must provide two text files: one from which the app will determine whether a word is valid or not, and the other from which the app will choose a new word for eath day from. These two text files are both in the same format: one 5-letter word per line, and should be located at `cmd/data/dictionary.txt` and `cmd/data/word_choices.txt` respectively.
 
 The repo also includes two scripts which can each generate one of the the required files from a larger, unprocessed (raw) text file, the instructions for how to source which are commented on in each respective script.
 
 # Running the app
 
-If you want to run the app in **debug** mode, you can simply run `go run wordle/src` on the command-line from the root directory of this project. This will begin the app's HTTP server on port `8080`. You can then visit `http://localhost:8080` in your browser to interact with the app.
+If you want to run the app in **debug** mode, you can simply run `go run github.com/evanoc3/wordle/cmd` on the command-line from the root directory of this project. This will begin the app's HTTP server on port `8080`. You can then visit `http://localhost:8080` in your browser to interact with the app.
 
 The build the app for **release**, run `make` on the command-line from the root directory of this project. This will produce a standalone executable at `out/wordle` which you can then run to start the app.
 
